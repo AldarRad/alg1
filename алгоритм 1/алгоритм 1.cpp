@@ -1,6 +1,8 @@
 ﻿#include <iostream>
+#include <ctime>
 #include <chrono>
 #include <fstream>
+#include <cstdint>
 #include <random>
 using namespace std;
 
@@ -54,87 +56,114 @@ using namespace std;
 //	}
 //}
 
-int change(int** arr, int n)
+//int change(int** arr, int n)
+//{
+//	int oper = 0;
+//	int column_3 = 0;
+//	int column_2 = 0;
+//	int max3 = 0;
+//	int max2 = INT_MAX;
+//	int count = 0;
+//	for (int i = 0;i < n;i++)
+//	{
+//		for (int j = 0; j < n;j++)
+//		{
+//			oper++;
+//			if (arr[j][i] % 3 == 0)
+//			{
+//				count++;
+//			}
+//		}
+//		if (count > max3)
+//		{
+//			max3 = count;
+//			column_3 = i;
+//		}
+//	}
+//	count = 0;
+//	for (int i = 0;i <n;i++)
+//	{
+//		for (int j = 0; j < n;j++)
+//		{
+//			if (arr[j][i] % 2 == 0)
+//			{
+//				oper++;
+//				count += arr[j][i];
+//			}
+//		}
+//		if (count < max2)
+//		{
+//			max2 = count;
+//			column_2 = i;
+//		}
+//	}
+//	for (int i = 0; i < n;i++)
+//	{
+//		oper++;
+//		int temp = arr[column_2][i];
+//		arr[column_2][i] = arr[column_3][i];
+//		arr[column_3][i] = temp;
+//	}
+//	return oper;
+//}
+//int main()
+//{
+//	srand(time(0));
+//	uint32_t oper = 0;
+//	int** arr;
+//	auto start = std::chrono::steady_clock::now();
+//	auto end = std::chrono::steady_clock::now();
+//	std::ofstream file;
+//	file.open("number2.csv");
+//	file << "SIZE;TIME;SIZE;OPERATIONS\n";
+//	for (int i = 3; i < 30;i++)
+//	{
+//		arr = new int*[i];
+//		for (int j = 0;j < i;j++)
+//		{
+//			arr[j] = new int[i];
+//		}
+//		for (int j = 0; j < i;j++)
+//		{
+//			for (int k = 0; k < i; k++)
+//			{
+//				arr[j][k] = rand() % (i * 2);
+//			}
+//		}
+//		start = chrono::steady_clock::now();
+//		oper = change(arr, i);
+//		end = chrono::steady_clock::now();		
+//		file << i*i<< ";" << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << ";";
+//		file << i * i << ";" << oper << "\n";
+//		for (int j = 0;j<i;j++)
+//			delete[] arr[j];
+//		delete[] arr;
+//	}
+//}
+
+uint32_t fib(int n,uint32_t & oper)
 {
 	int oper = 0;
-	int column_3 = 0;
-	int column_2 = 0;
-	int max3 = 0;
-	int max2 = INT_MAX;
-	int count = 0;
-	for (int i = 0;i < n;i++)
-	{
-		for (int j = 0; j < n;j++)
-		{
-			oper++;
-			if (arr[j][i] % 3 == 0)
-			{
-				count++;
-			}
-		}
-		if (count > max3)
-		{
-			max3 = count;
-			column_3 = i;
-		}
-	}
-	count = 0;
-	for (int i = 0;i <n;i++)
-	{
-		for (int j = 0; j < n;j++)
-		{
-			if (arr[j][i] % 2 == 0)
-			{
-				oper++;
-				count += arr[j][i];
-			}
-		}
-		if (count < max2)
-		{
-			max2 = count;
-			column_2 = i;
-		}
-	}
-	for (int i = 0; i < n;i++)
-	{
-		oper++;
-		int temp = arr[column_2][i];
-		arr[column_2][i] = arr[column_3][i];
-		arr[column_3][i] = temp;
-	}
-	return oper;
+	oper++;
+	if (n <= 1)
+		return n;
+	return fib(n - 1,oper) + fib(n - 2,oper);
 }
 int main()
 {
-	srand(time(0));
 	uint32_t oper = 0;
-	int** arr;
 	auto start = std::chrono::steady_clock::now();
 	auto end = std::chrono::steady_clock::now();
 	std::ofstream file;
-	file.open("namber2.csv");
+	file.open("num3.csv");
 	file << "SIZE;TIME;SIZE;OPERATIONS\n";
-	for (int i = 3; i < 30;i++)
+	for (int i = 1;i < 30;i++)
 	{
-		arr = new int*[i];
-		for (int j = 0;j < i;j++)
-		{
-			arr[j] = new int[i];
-		}
-		for (int j = 0; j < i;j++)
-		{
-			for (int k = 0; k < i; k++)
-			{
-				arr[j][k] = rand() % (i * 2);
-			}
-		}
-		start = chrono::steady_clock::now();
-		oper = change(arr, i);
-		end = chrono::steady_clock::now();		
-		file << i*i<< ";" << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << ";";
-		file << i * i << ";" << oper << "\n";
-		for (int j = 0;j<i;j++)
-			delete[] arr[j];
-		delete[] arr;
+		start = std::chrono::steady_clock::now();
+		fib(i,oper);
+		end = std::chrono::steady_clock::now();
+		file << i << ";" << chrono::duration_cast<chrono::nanoseconds>(end - start).count() << ";";
+		file << i << ";" << oper << "\n";
+		oper = 0;
 	}
 }
